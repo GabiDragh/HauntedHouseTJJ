@@ -27,7 +27,7 @@ scene.fog = fog;
 
 const textureLoader = new THREE.TextureLoader()
 
-// Roof textures
+// FIXME: Roof textures - could do with being in a separate file
 
 const roofColorTexture = textureLoader.load('/textures/roof/color.jpg')
 const roofAmbientOcclusionTexture = textureLoader.load('/textures/roof/ambientOcclusion.jpg')
@@ -123,32 +123,32 @@ const rocksRoughnessTexture = textureLoader.load('/textures/rocks/roughness.jpg'
 
 rocksColorTexture.colorSpace = THREE.SRGBColorSpace
 
-// Grass texture
+// snow texture
 
-const grassColorTexture = textureLoader.load('/textures/grass/color.jpg')
-const grassAmbientOcclusionTexture = textureLoader.load('/textures/grass/ambientOcclusion.jpg')
-const grassHeighttexture = textureLoader.load('/textures/grass/height.png')
-const grassNormalTexture = textureLoader.load('/textures/grass/normal.jpg')
-const grassRoughnessTexture = textureLoader.load('/textures/grass/roughness.jpg')
+const snowColorTexture = textureLoader.load('/textures/snow/color.jpg')
+const snowAmbientOcclusionTexture = textureLoader.load('/textures/snow/ambientOcclusion.jpg')
+const snowHeighttexture = textureLoader.load('/textures/snow/height.png')
+const snowNormalTexture = textureLoader.load('/textures/snow/normal.jpg')
+const snowRoughnessTexture = textureLoader.load('/textures/snow/roughness.jpg')
 
-grassColorTexture.colorSpace = THREE.SRGBColorSpace
+snowColorTexture.colorSpace = THREE.SRGBColorSpace
 
-// Vector 2 grass repeat pattern
+// Vector 2 snow repeat pattern
 
-grassColorTexture.repeat.set(8, 8)
-grassAmbientOcclusionTexture.repeat.set(8, 8)
-grassNormalTexture.repeat.set(8, 8)
-grassRoughnessTexture.repeat.set(8, 8)
+snowColorTexture.repeat.set(4, 4)
+snowAmbientOcclusionTexture.repeat.set(4, 4)
+snowNormalTexture.repeat.set(4, 4)
+snowRoughnessTexture.repeat.set(4, 4)
 
-grassColorTexture.wrapS = THREE.RepeatWrapping
-grassAmbientOcclusionTexture.wrapS = THREE.RepeatWrapping
-grassNormalTexture.wrapS = THREE.RepeatWrapping
-grassRoughnessTexture.wrapS = THREE.RepeatWrapping
+snowColorTexture.wrapS = THREE.RepeatWrapping
+snowAmbientOcclusionTexture.wrapS = THREE.RepeatWrapping
+snowNormalTexture.wrapS = THREE.RepeatWrapping
+snowRoughnessTexture.wrapS = THREE.RepeatWrapping
 
-grassColorTexture.wrapT = THREE.RepeatWrapping
-grassAmbientOcclusionTexture.wrapT = THREE.RepeatWrapping
-grassNormalTexture.wrapT = THREE.RepeatWrapping
-grassRoughnessTexture.wrapT = THREE.RepeatWrapping
+snowColorTexture.wrapT = THREE.RepeatWrapping
+snowAmbientOcclusionTexture.wrapT = THREE.RepeatWrapping
+snowNormalTexture.wrapT = THREE.RepeatWrapping
+snowRoughnessTexture.wrapT = THREE.RepeatWrapping
 
 
 /**
@@ -188,8 +188,7 @@ const roof = new THREE.Mesh(
     new THREE.MeshLambertMaterial ({ color: '#6c4c27'}),
     new THREE.MeshLambertMaterial ({ color: '#6c4c27'})
 ]);
-    // new THREE.MeshStandardMaterial({ color:'#b35f45' })
-// )
+
 roof.position.y = 3 + 2.75 / 2 //wall + roofHt/2
 roof.rotation.y = Math.PI / 4
 house.add(roof)
@@ -345,7 +344,7 @@ fontLoader.load(
 
 )
 
-// INFO: rockes
+// INFO: Rocks
 
 const rockGeometry = new THREE.SphereGeometry(1, 16, 16)
 const rockMaterial = new THREE.MeshStandardMaterial({ 
@@ -411,12 +410,12 @@ for( let i = 0; i < 40; i++) {
 const floor = new THREE.Mesh(
     new THREE.PlaneGeometry(20, 20),
     new THREE.MeshStandardMaterial({
-        map: grassColorTexture,
-        aoMap: grassAmbientOcclusionTexture,
-        displacementMap: grassHeighttexture,
+        map: snowColorTexture,
+        aoMap: snowAmbientOcclusionTexture,
+        displacementMap: snowHeighttexture,
         displacementScale: 0.1,
-        normalMap: grassNormalTexture,
-        roughnessMap: grassRoughnessTexture
+        normalMap: snowNormalTexture,
+        roughnessMap: snowRoughnessTexture
     })
 )
 floor.rotation.x = - Math.PI * 0.5
