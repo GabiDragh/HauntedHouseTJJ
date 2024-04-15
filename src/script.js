@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import GUI from 'lil-gui'
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 
 /**
  * Base
@@ -23,8 +25,63 @@ scene.fog = fog;
  * INFO: Textures
  */
 
-// Door textures
 const textureLoader = new THREE.TextureLoader()
+
+// Roof textures
+
+const roofColorTexture = textureLoader.load('/textures/roof/color.jpg')
+const roofAmbientOcclusionTexture = textureLoader.load('/textures/roof/ambientOcclusion.jpg')
+const roofHeightTexture = textureLoader.load('/textures/roof/height.png')
+const roofNormalTexture = textureLoader.load('/textures/roof/normal.jpg')
+const roofRoughnessTexture = textureLoader.load('/textures/roof/roughness.jpg')
+
+roofColorTexture.colorSpace = THREE.SRGBColorSpace
+
+roofColorTexture.repeat.set(5, 5)
+roofAmbientOcclusionTexture.repeat.set(6, 6)
+roofHeightTexture.repeat.set(6, 6)
+roofNormalTexture.repeat.set(6, 6)
+roofRoughnessTexture.repeat.set(6, 6)
+
+roofColorTexture.wrapS = THREE.RepeatWrapping
+roofAmbientOcclusionTexture.wrapS = THREE.RepeatWrapping
+roofHeightTexture.wrapS = THREE.RepeatWrapping
+roofNormalTexture.wrapS = THREE.RepeatWrapping
+roofRoughnessTexture.wrapS = THREE.RepeatWrapping
+
+roofColorTexture.wrapT = THREE.RepeatWrapping
+roofAmbientOcclusionTexture.wrapT = THREE.RepeatWrapping
+roofHeightTexture.wrapT = THREE.RepeatWrapping
+roofNormalTexture.wrapT = THREE.RepeatWrapping
+roofRoughnessTexture.wrapT = THREE.RepeatWrapping
+
+roofColorTexture.rotation = 6.23
+
+// Window textures
+
+const window1Colortexture = textureLoader.load('/textures/window1/color.jpg')
+const window1AmbientOcclusiontexture = textureLoader.load('/textures/window1/ambientOcclusion.jpg')
+const window1Heighttexture = textureLoader.load('/textures/window1/height.png')
+const window1Metallictexture = textureLoader.load('/textures/window1/metallic.jpg')
+const window1Normaltexture = textureLoader.load('/textures/window1/normal.jpg')
+const window1Opacitytexture = textureLoader.load('/textures/window1/opacity.jpg')
+const window1Roughnesstexture = textureLoader.load('/textures/window1/roughness.jpg')
+
+window1Colortexture.colorSpace = THREE.SRGBColorSpace
+
+// Stained Glass material
+
+// const window2Colortexture = textureLoader.load('/textures/window2/color.jpg')
+// const window2AmbientOcclusiontexture = textureLoader.load('/textures/window2/ambientOcclusion.jpg')
+// const window2Aplhatextture = textureLoader.load('/textures/window2/glass.jpg')
+// const window2Heighttexture = textureLoader.load('/textures/window2/height.png')
+// const window2Metalnesstexture = textureLoader.load('/textures/window2/metallic.jpg')
+// const window2Normaltexture = textureLoader.load('/textures/window2/normal.jpg')
+// const window2Roughnesstexture = textureLoader.load('/textures/window2/roughness.jpg')
+
+// window2Colortexture.colorSpace = THREE.SRGBColorSpace
+
+// Door textures
 
 const doorColorTexture = textureLoader.load('/textures/door/color.jpg')
 const doorAlphaTexture = textureLoader.load('/textures/door/alpha.jpg')
@@ -45,10 +102,32 @@ const bricksRoughnessTexture = textureLoader.load('/textures/bricks/roughness.jp
 
 bricksColorTexture.colorSpace = THREE.SRGBColorSpace
 
-// Floor texture
+// Grave texture
+
+const graveColorTexture = textureLoader.load('/textures/grave/color.jpg')
+const graveAmbientOcclusionTexture = textureLoader.load('/textures/grave/ambientOcclusion.jpg')
+const graveHeightTexture = textureLoader.load('/textures/grave/height.png')
+const graveMetallicTexture = textureLoader.load('/textures/grave/metallic.jpg')
+const graveNormalTexture = textureLoader.load('/textures/grave/normal.jpg')
+const graveRoughnessTexture = textureLoader.load('/textures/grave/roughness.jpg')
+
+graveColorTexture.colorSpace = THREE.SRGBColorSpace
+
+// Rocks Texture
+
+const rocksColorTexture = textureLoader.load('/textures/rocks/color.jpg')
+const rocksAmbientOcclusionTexture = textureLoader.load('/textures/rocks/ambientOcclusion.jpg')
+const rocksHeightTexture = textureLoader.load('/textures/rocks/height.png')
+const rocksNormalTexture = textureLoader.load('/textures/rocks/normal.jpg')
+const rocksRoughnessTexture = textureLoader.load('/textures/rocks/roughness.jpg')
+
+rocksColorTexture.colorSpace = THREE.SRGBColorSpace
+
+// Grass texture
 
 const grassColorTexture = textureLoader.load('/textures/grass/color.jpg')
 const grassAmbientOcclusionTexture = textureLoader.load('/textures/grass/ambientOcclusion.jpg')
+const grassHeighttexture = textureLoader.load('/textures/grass/height.png')
 const grassNormalTexture = textureLoader.load('/textures/grass/normal.jpg')
 const grassRoughnessTexture = textureLoader.load('/textures/grass/roughness.jpg')
 
@@ -90,18 +169,126 @@ const walls = new THREE.Mesh(
      })
 )
 walls.position.y = 3 / 2
+
 house.add(walls)
 
 
 // INFO: Roof
 
 const roof = new THREE.Mesh(
-    new THREE.ConeGeometry(4, 1.5, 4),
-    new THREE.MeshStandardMaterial({ color:'#b35f45' })
-)
-roof.position.y = 3 + 0.75
+    new THREE.CylinderGeometry(0, 3.5, 2.75, 4, 1),
+    [new THREE.MeshLambertMaterial ({  
+        map: roofColorTexture,
+        aoMap: roofAmbientOcclusionTexture,
+        displacementMap: roofHeightTexture,
+        displacementScale: 0.01,
+        normalMap: roofNormalTexture,
+        // roughnessMap: roofRoughnessTexture
+    }),
+    new THREE.MeshLambertMaterial ({ color: '#6c4c27'}),
+    new THREE.MeshLambertMaterial ({ color: '#6c4c27'})
+]);
+    // new THREE.MeshStandardMaterial({ color:'#b35f45' })
+// )
+roof.position.y = 3 + 2.75 / 2 //wall + roofHt/2
 roof.rotation.y = Math.PI / 4
 house.add(roof)
+
+// TODO: Group Window 1 into a white window group with the glass
+
+const window1 = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.5, 1.5, 100, 100),
+    new THREE.MeshStandardMaterial({ 
+        map: window1Colortexture,
+        // transparent: true,
+        // alphaMap: window1Opacitytexture,
+        aoMap: window1AmbientOcclusiontexture,
+        displacementMap: window1Heighttexture,
+        displacementScale: 0.2,
+        metalnessMap: window1Metallictexture,
+        normalMap: window1Normaltexture,
+        roughnessMap: window1Roughnesstexture
+    })
+)
+
+window1.position.set(0, 1.5, 1.99)
+
+// Window 1 glass
+
+const window1Glass = new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 1),
+    new THREE.MeshStandardMaterial({
+        color: '#a3c4d7',
+        roughness: 0.01,
+        metalness: 0.8,
+        transparent: true
+    })
+)
+window1Glass.position.set(0, 1.5, 2.001)
+
+house.add(window1, window1Glass)
+
+// Window 2 = cleanup up - can be dryer
+
+const window2 = new THREE.Mesh(
+    new THREE.PlaneGeometry(2.5, 1.5, 100, 100),
+    new THREE.MeshStandardMaterial({ 
+        map: window1Colortexture,
+        // transparent: true,
+        // alphaMap: window2Opacitytexture,
+        aoMap: window1AmbientOcclusiontexture,
+        displacementMap: window1Heighttexture,
+        displacementScale: 0.2,
+        metalnessMap: window1Metallictexture,
+        normalMap: window1Normaltexture,
+        roughnessMap: window1Roughnesstexture
+    })
+)
+
+window2.position.set(0, 1.5, -1.999)
+window2.rotation.y = Math.PI
+
+// Window 1 glass
+
+const window2Glass = new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 1),
+    new THREE.MeshStandardMaterial({
+        color: '#a3c4d7',
+        roughness: 0.01,
+        metalness: 0.8,
+        transparent: true
+    })
+)
+window2Glass.position.set(0, 1.5, -2.001)
+window2Glass.rotation.y = Math.PI
+
+house.add(window2, window2Glass)
+
+// Window 2 - stained glass
+
+// const stainedGlassGeometry = new THREE.PlaneGeometry(1, 1.8)
+// const stainedGlassMaterial = new THREE.MeshStandardMaterial({
+//     map: window2Colortexture,
+//     aoMap: window2AmbientOcclusiontexture,
+//     transparent: true,
+//     alphaMap: window2Aplhatextture,
+//     displacementMap: window2Heighttexture,
+//     displacementScale: 0.1,
+//     metalnessMap: window2Metalnesstexture,
+//     normalMap: window2Normaltexture,
+//     roughnessMap: window2Roughnesstexture,
+//     // color: '#00ff00'
+// })
+
+// const stainedGlass1 = new THREE.Mesh(stainedGlassGeometry, stainedGlassMaterial)
+// stainedGlass1.position.set(2.01, 1.32, 1.3)
+// stainedGlass1.rotation.y = Math.PI / 2
+
+// const stainedGlass2 = new THREE.Mesh(stainedGlassGeometry, stainedGlassMaterial)
+// stainedGlass2.position.set(2.01, 1.32, -1.3)
+// stainedGlass2.rotation.y = Math.PI / 2
+
+// house.add(stainedGlass1, stainedGlass2)
 
 // INFO: Door
 
@@ -126,28 +313,67 @@ door.rotation.y = Math.PI / 2
 
 house.add(door)
 
-// INFO: Bushes
+// 3d Text
 
-const bushGeometry = new THREE.SphereGeometry(1, 16, 16)
-const bushMaterial = new THREE.MeshStandardMaterial({ color: '#89c854'})
+const fontLoader = new FontLoader();
 
-const bush1 = new THREE.Mesh(bushGeometry, bushMaterial)
-bush1.scale.set(0.35, 0.35, 0.35)
-bush1.position.set(0.95, 0.3, 2.7)
+fontLoader.load(
+    '/fonts/helvetiker_regular.typeface.json',
+    (font) => {
+        const textGeometry = new TextGeometry(
+            'Random House',
+            {
+                font: font, 
+                size: 0.2,
+                height: 0.07,
+                curveSegments: 5,
+                bevelEnabled: true,
+                bevelThickness: 0.02,
+                bevelSize: 0.02,
+                bevelOffset: 0,
+                bevelSegments: 3
+            }
+        );
 
-const bush2 = new THREE.Mesh(bushGeometry, bushMaterial)
-bush2.scale.set(0.25, 0.25, 0.25)
-bush2.position.set(1.5, 0.2, 2.7)
+        textGeometry.center() //INFO: the easy version of the lines above :)
+        const material = new THREE.MeshStandardMaterial({ color: '#ff0000' });
+        const text = new THREE.Mesh(textGeometry, material);
+        text.position.set(2, 2.3, 0)
+        text.rotation.y = Math.PI / 2
+        house.add(text)
+    }
 
-const bush3 = new THREE.Mesh(bushGeometry, bushMaterial)
-bush3.scale.set(0.35, 0.35, 0.35)
-bush3.position.set(2, 0.3, 2.5)
+)
 
-const bush4 = new THREE.Mesh(bushGeometry, bushMaterial)
-bush4.scale.set(0.25, 0.25, 0.25)
-bush4.position.set(2.35, 0.2, 2.05)
+// INFO: rockes
 
-house.add(bush1, bush2, bush3, bush4)
+const rockGeometry = new THREE.SphereGeometry(1, 16, 16)
+const rockMaterial = new THREE.MeshStandardMaterial({ 
+    map: rocksColorTexture,
+    aoMap: rocksAmbientOcclusionTexture,
+    displacementMap: rocksHeightTexture,
+    displacementScale: 0.01,
+    normalMap: rocksNormalTexture,
+    roughnessMap: rocksRoughnessTexture
+})
+
+const rock1 = new THREE.Mesh(rockGeometry, rockMaterial)
+rock1.scale.set(0.35, 0.35, 0.35)
+rock1.position.set(0.95, 0.3, 2.7)
+
+const rock2 = new THREE.Mesh(rockGeometry, rockMaterial)
+rock2.scale.set(0.25, 0.25, 0.25)
+rock2.position.set(1.5, 0.2, 2.7)
+
+const rock3 = new THREE.Mesh(rockGeometry, rockMaterial)
+rock3.scale.set(0.35, 0.35, 0.35)
+rock3.position.set(2, 0.3, 2.5)
+
+const rock4 = new THREE.Mesh(rockGeometry, rockMaterial)
+rock4.scale.set(0.25, 0.25, 0.25)
+rock4.position.set(2.35, 0.2, 2.05)
+
+house.add(rock1, rock2, rock3, rock4)
 
 // INFO: Graves
 
@@ -155,7 +381,15 @@ const graves = new THREE.Group();
 scene.add(graves)
 
 const graveGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.2) //height, width, depth
-const graveMaterial = new THREE.MeshStandardMaterial({ color: '#b2b6b1' })
+const graveMaterial = new THREE.MeshStandardMaterial({ 
+    map: graveColorTexture,
+    aoMap: graveAmbientOcclusionTexture,
+    displacementMap: graveHeightTexture,
+    displacementScale: 0.0001,
+    metalnessMap: graveMetallicTexture,
+    normalMap: graveNormalTexture,
+    roughnessMap: graveRoughnessTexture
+ })
 
 for( let i = 0; i < 40; i++) {
     const angle = Math.random() * Math.PI * 2
@@ -165,7 +399,7 @@ for( let i = 0; i < 40; i++) {
     const z = Math.cos(angle) * radius;
 
     const grave = new THREE.Mesh(graveGeometry, graveMaterial)
-    grave.position.set(x, 0.3, z)
+    grave.position.set(x, 0.35, z)
 
     grave.rotation.y = (Math.random() - 0.5) * 0.7;
     grave.rotation.z = (Math.random() - 0.5) * 0.4;
@@ -179,6 +413,8 @@ const floor = new THREE.Mesh(
     new THREE.MeshStandardMaterial({
         map: grassColorTexture,
         aoMap: grassAmbientOcclusionTexture,
+        displacementMap: grassHeighttexture,
+        displacementScale: 0.1,
         normalMap: grassNormalTexture,
         roughnessMap: grassRoughnessTexture
     })
@@ -192,7 +428,7 @@ scene.add(floor)
  * Lights
  */
 // Ambient light
-const ambientLight = new THREE.AmbientLight('#b9d5ff', 0.12)
+const ambientLight = new THREE.AmbientLight('#b9d5ff', 0.52)
 gui.add(ambientLight, 'intensity').min(0).max(1).step(0.001)
 scene.add(ambientLight)
 
@@ -209,6 +445,8 @@ scene.add(moonLight)
 const doorLight = new THREE.PointLight('#ff7d46', 2, 6) //color, intensity, distance
 doorLight.position.set(2.7, 2.4, 0)
 house.add(doorLight)
+
+
 
 // INFO: Ghost Light
 const ghost1 = new THREE.PointLight('#ff00ff', 6, 3)
@@ -285,9 +523,9 @@ ghost3.castShadow = true
 
 walls.castShadow = true
 roof.castShadow = true
-bush1.castShadow = true
-bush2.castShadow = true
-bush3.castShadow = true
+rock1.castShadow = true
+rock2.castShadow = true
+rock3.castShadow = true
 
 floor.receiveShadow = true
 
